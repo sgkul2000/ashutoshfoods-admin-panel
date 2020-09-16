@@ -7,6 +7,12 @@ on:
     branches: [master]
 
 jobs:
+  test-packages:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: test packages
+        run: echo "Running tests"
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
