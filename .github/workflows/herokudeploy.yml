@@ -1,3 +1,35 @@
+# name: Deploy
+
+# on:
+#   push:
+#     branches: [master]
+#   pull_request:
+#     branches: [master]
+
+# jobs:
+#   test-unit:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v1
+#       - name: test packages
+#         run: echo "Running tests"
+#   deploy:
+#     name: Deploy
+#     runs-on: ubuntu-latest
+#     needs: test-unit
+#     steps:
+#       - uses: actions/checkout@v2
+#       # possibly setup node action here...
+#       # possibly cache of node modules action here...
+#       # build steps here...
+#       - uses: onekiloparsec/heroku-node-deploy-subfolder@v1.0.4
+#         with:
+#           api_key: ${{secrets.HEROKU_API_KEY}}
+#           email: ${{secrets.HEROKU_EMAIL}}
+#           app_name: 'ashutoshfoods-admin-panel'
+#           branch: 'HEAD'
+#           subfolder: 'server'
+
 name: Deploy
 
 on:
@@ -7,25 +39,16 @@ on:
     branches: [master]
 
 jobs:
-  test-unit:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - name: test packages
-        run: echo "Running tests"
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
-    needs: test-unit
+
     steps:
-      - uses: actions/checkout@v2
-      # possibly setup node action here...
-      # possibly cache of node modules action here...
-      # build steps here...
-      - uses: onekiloparsec/heroku-node-deploy-subfolder@v1.0.4
-        with:
-          api_key: ${{secrets.HEROKU_API_KEY}}
-          email: ${{secrets.HEROKU_EMAIL}}
-          app_name: 'ashutoshfoods-admin-panel'
-          branch: 'HEAD'
-          subfolder: 'server'
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Add remote origin
+        run: git remote add heroku https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/${{ secrets.HEROKU_APP_NAME }}.git
+
+      - name: Deploy backend to heroku
+        run: git push --force heroku `git subtree split --prefix server HEAD`
