@@ -27,5 +27,5 @@ jobs:
           api_key: ${{secrets.HEROKU_API_KEY}}
           email: ${{secrets.HEROKU_EMAIL}}
           app_name: 'ashutoshfoods-admin-panel'
-          branch: 'master'
+          branch: 'HEAD:master'
           subfolder: 'server'
