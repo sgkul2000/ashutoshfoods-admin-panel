@@ -1,0 +1,29 @@
+{
+  "name": "ashutoshfoods-admin-panel",
+  "version": "1.0.0",
+  "description": "an admin panel for ashutosh foods website",
+  "main": "index.js",
+  "scripts": {
+    "heroku-prebuild": "npm install pm2 -g",
+    "start": "pm2-runtime start ecosystem.config.js --env production",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sgkul2000/ashutoshfoods-admin-panel.git"
+  },
+  "author": "Shreesh Kulkarni",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/sgkul2000/ashutoshfoods-admin-panel/issues"
+  },
+  "homepage": "https://github.com/sgkul2000/ashutoshfoods-admin-panel#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.4"
+  }
+}

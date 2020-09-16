@@ -1,0 +1,32 @@
+// app global css in SCSS form
+.loginMain {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  .inputWrapper {
+    width: 400px;
+  }
+
+  .q-input {
+    margin: 10px 0;
+  }
+
+  h4 {
+    font-size: 2rem;
+    font-weight: 500;
+    margin-bottom: 0rem;
+  }
+
+  h6 {
+    margin: 0.3rem 0;
+    font-weight: 300;
+  }
+
+  #loginSubmit {
+    margin: 10px 0;
+  }
+}
