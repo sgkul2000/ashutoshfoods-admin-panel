@@ -42,18 +42,17 @@ export default function ( /* { store, ssrContext } */ ) {
       var validity = now.getTime() < expiry * 1000;
       axios.defaults.headers.common['Authorization'] = localStorage.jwt
       if (validity) {
-        console.log('requesting here')
         axios.get('/auth').then((res) => {
           var user = res.data.data
           localStorage.setItem('user', JSON.stringify(user))
         }).catch((error) => {
           console.error(error)
           next({
-          path: '/login',
-          params: {
-            nextUrl: to.fullPath
-          }
-        })
+            path: '/login',
+            params: {
+              nextUrl: to.fullPath
+            }
+          })
           // Vue.$q.notify({
           //   type: 'negative',
           //   message: 'Session Timedout.',

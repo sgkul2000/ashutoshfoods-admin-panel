@@ -63,7 +63,7 @@ const linksData = [
     title: 'Analytics',
     // caption: '@quasarframework',
     icon: 'show_chart',
-    link:'Home'
+    link: 'Home'
   },
   {
     title: 'Manage products',
@@ -81,14 +81,14 @@ const linksData = [
     title: 'Manage admins',
     // caption: 'chat.quasar.dev',
     icon: 'account_circle',
-    link: ''
+    link: 'Admin'
   },
   {
     title: 'Completed orders',
     // caption: 'forum.quasar.dev',
     icon: 'assignment_turned_in',
     link: 'Completed'
-  },
+  }
 ]
 
 export default {
@@ -98,28 +98,27 @@ export default {
     return {
       leftDrawerOpen: false,
       essentialLinks: linksData,
-      delay: 0,
+      delay: 0
     }
   },
-  methods:{
-    onStartAjaxBar(){
+  methods: {
+    onStartAjaxBar () {
       this.$refs.bar.start()
     },
-    onStopAjaxBar(){
+    onStopAjaxBar () {
       this.$refs.bar.stop()
     }
   },
-  computed:{
+  computed: {
     ...mapGetters({
       currentUser: 'mainStore/getUsername'
     })
   },
-  created(){
+  created () {
     var user = JSON.parse(localStorage.getItem('user'))
     this.$store.commit('mainStore/updateAuth', user)
   }
 }
 </script>
-
 
 <style lang="scss" scoped src="src/css/layout.scss"></style>

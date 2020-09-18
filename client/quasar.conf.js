@@ -7,7 +7,7 @@
 // https://quasar.dev/quasar-cli/quasar-conf-js
 /* eslint-env node */
 
-module.exports = function ( /* ctx */ ) {
+module.exports = function (/* ctx */) {
   return {
     // https://quasar.dev/quasar-cli/supporting-ts
     supportTS: false,
@@ -45,7 +45,14 @@ module.exports = function ( /* ctx */ ) {
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
     build: {
       vueRouterMode: 'history', // available values: 'hash', 'history'
-      distDir: '../server/public'
+      distDir: '../server/public',
+      uglifyOptions: {
+        compress: {
+          drop_debugger: true,
+          drop_console: true,
+          pure_funcs: ['console.info', 'console.debug', 'console.warn']
+        }
+      }
 
       // transpile: false,
 
@@ -83,7 +90,8 @@ module.exports = function ( /* ctx */ ) {
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-framework
     framework: {
-      iconSet: 'material-icons', // Quasar icon set
+      iconSet: 'material-icons', // Quasar icon set,
+      cssAddon: true,
       lang: 'en-us', // Quasar language pack
       config: {
         loadingBar: {
@@ -95,11 +103,11 @@ module.exports = function ( /* ctx */ ) {
           position: 'top',
           group: true,
           progress: true,
-          timeout: 3000,
+          timeout: 3000
           // closeBtn: true
         },
         loading: {
-          delay: 0,
+          delay: 0
           // spinner: 'q-spinner-ios'
         }
       },
@@ -146,30 +154,30 @@ module.exports = function ( /* ctx */ ) {
         background_color: '#ffffff',
         theme_color: '#027be3',
         icons: [{
-            src: 'icons/icon-128x128.png',
-            sizes: '128x128',
-            type: 'image/png'
-          },
-          {
-            src: 'icons/icon-192x192.png',
-            sizes: '192x192',
-            type: 'image/png'
-          },
-          {
-            src: 'icons/icon-256x256.png',
-            sizes: '256x256',
-            type: 'image/png'
-          },
-          {
-            src: 'icons/icon-384x384.png',
-            sizes: '384x384',
-            type: 'image/png'
-          },
-          {
-            src: 'icons/icon-512x512.png',
-            sizes: '512x512',
-            type: 'image/png'
-          }
+          src: 'icons/icon-128x128.png',
+          sizes: '128x128',
+          type: 'image/png'
+        },
+        {
+          src: 'icons/icon-192x192.png',
+          sizes: '192x192',
+          type: 'image/png'
+        },
+        {
+          src: 'icons/icon-256x256.png',
+          sizes: '256x256',
+          type: 'image/png'
+        },
+        {
+          src: 'icons/icon-384x384.png',
+          sizes: '384x384',
+          type: 'image/png'
+        },
+        {
+          src: 'icons/icon-512x512.png',
+          sizes: '512x512',
+          type: 'image/png'
+        }
         ]
       }
     },
@@ -210,7 +218,7 @@ module.exports = function ( /* ctx */ ) {
       // More info: https://quasar.dev/quasar-cli/developing-electron-apps/node-integration
       nodeIntegration: true,
 
-      extendWebpack( /* cfg */ ) {
+      extendWebpack (/* cfg */) {
         // do something with Electron main process Webpack cfg
         // chainWebpack also available besides this extendWebpack
       }

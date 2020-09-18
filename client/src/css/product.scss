@@ -1,0 +1,19 @@
+@import './quasar.variables.scss';
+
+.card {
+  // padding: 10px;
+  margin: 20px 10px;
+  border-radius: 10px;
+  box-shadow: 1px 0 20px rgba(0, 0, 0, 0.3);
+}
+
+#productMain{
+    .checkboxWrapper{
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+    }
+    .cancelBtn{
+        transform:translateY(-60px);
+    }
+}

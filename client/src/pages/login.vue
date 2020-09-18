@@ -2,7 +2,7 @@
   <div class="loginMain">
     <h4>Ashutosh Foods</h4>
     <h6>Admin Panel</h6>
-    <div class="inputWrapper">
+    <div class="inputWrapper q-px-lg">
       <!-- <input type="text" v-model="email"> -->
       <q-input
         v-model="email"
@@ -10,7 +10,7 @@
         :dense="true"
         type="email"
         :disable="loading"
-        :error="isEmailValid"
+        :error="validateForm()"
         error-message="Email Invalid"
       >
         <template v-slot:prepend>
@@ -18,7 +18,7 @@
         </template>
       </q-input>
       <q-input
-        @keydown.enter="validateForm()"
+        @keydown.enter="login()"
         v-model="password"
         label="Enter password"
         :dense="true"
@@ -46,7 +46,7 @@
         color="primary"
         label="Login"
         padding="20px auto"
-        @click="validateForm()"
+        @click="login()"
       />
       <q-btn
         flat
@@ -66,8 +66,8 @@ export default {
   name: 'login',
   data () {
     return {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
       isPwd: true,
       loading: false,
       delay: 0,
@@ -91,37 +91,33 @@ export default {
         var data = res.data
         console.log(data)
         if (data.auth) {
-          localStorage.setItem("user", JSON.stringify(data.user));
-          localStorage.setItem("jwt", data.token);
+          localStorage.setItem('user', JSON.stringify(data.user))
+          localStorage.setItem('jwt', data.token)
           this.$store.commit('mainStore/updateAuth', data.user)
           this.$router.push({ name: 'Home' })
           this.$q.notify({
-            type: "positive",
+            type: 'positive',
             message: `Welcome ${data.user.username}`
           })
         } else {
-          throw "Login unsuccessful"
+          throw data.error
         }
         // this.$refs.ajaxBar.stop()
       }).catch((err) => {
         console.error(err)
         this.$q.notify({
-          message: "Login unsuccessful, please try again.",
-          type: "negative",
+          message: 'Login unsuccessful, please try again.',
+          type: 'negative',
+          caption: err,
           actions: [{ icon: 'close', color: 'white' }]
         })
       })
       this.$q.loadingBar.stop()
       this.loading = false
-
     },
     validateForm () {
-      const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      if (re.test(String(this.email).toLowerCase()) && this.password !== "") {
-        this.login()
-      } else {
-        this.isEmailValid = true
-      }
+      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      return !(re.test(String(this.email).toLowerCase()))
     }
   }
 }
