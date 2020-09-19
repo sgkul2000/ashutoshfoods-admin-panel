@@ -2,12 +2,12 @@
   <div id="ordersMain" class="scroll" style="height: 100%">
     <q-pull-to-refresh ref="pullToRefresh" @refresh="getOrders">
       <q-list>
-        <q-item-label header>Recent orders</q-item-label>
+        <q-item-label header>Completed orders</q-item-label>
         <!-- <q-separator spaced inset /> -->
         <div class="" v-for="(item, index) in ordersList" :key="index" @click="redirectToOrder(item)">
-          <q-slide-item @left="(reset) => { toggleComplete(reset, item) }" @right="(reset) => { toggleDelete(reset, item) }" right-color="red">
+          <q-slide-item @left="(reset) => { toggleComplete(reset, item) }" @right="(reset) => { toggleDelete(reset, item) }" left-color="orange" right-color="red">
             <template v-slot:left>
-              <q-icon name="done" />
+              <q-icon name="update" />
             </template>
             <template v-slot:right>
               <q-icon name="delete" />
@@ -85,7 +85,6 @@ export default {
       try {
         var data = await this.$axios.get('/order', {
           params: {
-            all: 1,
             completed: 1
           }
         })
@@ -145,7 +144,7 @@ export default {
     },
     async markPending () {
       this.loading = true
-      await this.$axios.put('/order/' + this.completeOrder._id, { data: { status: 'pending' } }).then((res) => {
+      await this.$axios.put('/order/' + this.completeOrder._id, { status: 'pending' }).then((res) => {
         console.log(res)
         this.$q.notify({
           message: 'Marked as pending successfully!',

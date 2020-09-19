@@ -253,7 +253,7 @@ export default {
         })
         this.loading = false
         this.confirmDelete = false
-        this.getOrder()
+        this.$router.push({name:this.isPending ? 'Orders' : 'Completed' })
       }).catch(err => {
         console.error(err)
         this.$q.notify({
