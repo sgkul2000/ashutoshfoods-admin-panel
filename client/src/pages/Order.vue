@@ -8,16 +8,16 @@
               <q-item-label header>General info:</q-item-label>
               <!-- <q-separator spaced inset /> -->
                   <div class="row full-width">
-                    <div class="col-12 col-md-6 justify-end justify-sm-center generalMoney q-py-md q-px-md">
+                    <div class="col-12 col-md-6 justify-end justify-sm-center generalMoney q-py-md q-px-md" @click="copyClipboard(currentOrder.status)">
                       Status : {{currentOrder.status}}
                     </div>
-                    <div class="col-12 col-md-6 justify-end justify-sm-center generalMoney q-py-md q-px-md">
+                    <div class="col-12 col-md-6 justify-end justify-sm-center generalMoney q-py-md q-px-md" @click="copyClipboard(currentOrder.amount)">
                       Amount : ₹{{currentOrder.amount}}
                     </div>
-                    <div class="col-12 col-md-6 justify-start generalDate q-py-md  q-px-md">
+                    <div class="col-12 col-md-6 justify-start generalDate q-py-md  q-px-md" @click="copyClipboard(getDate(currentOrder.createdAt))">
                       Date of order : {{getDate(currentOrder.createdAt)}}
                     </div>
-                    <div class="col-12 col-md-12 justify-start justify-sm-center generayDelivery q-py-md q-px-md">
+                    <div class="col-12 col-md-12 justify-start justify-sm-center generayDelivery q-py-md q-px-md" @click="copyClipboard(currentOrder.eastimatedDelivery)">
                       Estimated Delivery :
                     </div>
                     <div class="col-12 col-sm-6 q-py-xs q-py-sm-md q-px-md">
@@ -36,13 +36,13 @@
               <q-item-label header>User info:</q-item-label>
               <!-- <q-separator spaced inset /> -->
                 <div class="row full-width">
-                  <div class="col-12 col-sm-6 q-py-sm q-px-md">
+                  <div class="col-12 col-sm-6 q-py-sm q-px-md" @click="copyClipboard(currentOrder.user.fullname)">
                     Name : {{currentOrder.user ? currentOrder.user.fullname : ""}}
                   </div>
-                  <div class="col-12 col-sm-6 q-py-sm q-px-md">
+                  <div class="col-12 col-sm-6 q-py-sm q-px-md" @click="copyClipboard(currentOrder.user.email)">
                     Email : {{currentOrder.user ? currentOrder.user.email : ""}}
                   </div>
-                  <div class="col-12 col-sm-6 q-py-sm q-px-md">
+                  <div class="col-12 col-sm-6 q-py-sm q-px-md" @click="copyClipboard(currentOrder.user.phone)">
                     Phone number : {{currentOrder.user ? currentOrder.user.phone : ""}}
                   </div>
                 </div>
@@ -82,7 +82,7 @@
             <q-list>
               <q-item-label header>User info:</q-item-label>
               <!-- <q-separator spaced inset /> -->
-                <div class="row full-width">
+                <div class="row full-width" @click="copyClipboardAddress()">
                   <div class="col-12 col-sm-6 q-py-sm q-px-md">
                     Flat No. : {{currentOrder.address.flat}}
                   </div>
@@ -103,6 +103,9 @@
                   </div>
                   <div class="col-12 col-sm-6 q-py-sm q-px-md">
                     Pincode : {{currentOrder.address.pincode}}
+                  </div>
+                  <div class="col-12 col-sm-6 q-py-sm q-px-md" v-if="currentOrder.address.gpsLocation" @click="copyClipboard(currentOrder.gpsLocation)">
+                    Pincode : {{currentOrder.address.gpsLocation}}
                   </div>
                   <!-- <div class="col-12 col-sm-6 q-py-sm q-py-sm-md q-px-md q-mx-auto">
                     <iframe v-if="mapUrl" frameborder="0" style="border:0" :src="`https://www.google.com/maps/embed/v1/place?key=AIzaSyCSKZBWFskppgK-yXcJO9t-_W8DKM0Xack&q=${mapUrl}`" allowfullscreen>
@@ -149,6 +152,7 @@
 
 <script>
 import productSvgManager from 'components/productSvgManager'
+import { copyToClipboard } from 'quasar'
 import moment from 'moment'
 export default {
   name: 'Order',
@@ -253,7 +257,7 @@ export default {
         })
         this.loading = false
         this.confirmDelete = false
-        this.$router.push({name:this.isPending ? 'Orders' : 'Completed' })
+        this.$router.push({ name: this.isPending ? 'Orders' : 'Completed' })
       }).catch(err => {
         console.error(err)
         this.$q.notify({
@@ -264,7 +268,44 @@ export default {
         })
       })
       this.loading = false
+    },
+    copyClipboard (item) {
+      if (!item) {
+        return null
+      }
+      copyToClipboard(item).then(() => {
+        this.$q.notify({
+          message: 'Coppied to clipboard!',
+          type: 'positive',
+          actions: [{ icon: 'close', color: 'white' }]
+        })
+      }).catch(err => {
+        console.error(err)
+        this.$q.notify({
+          message: 'Unable to copy text',
+          type: 'negative',
+          actions: [{ icon: 'close', color: 'white' }]
+        })
+      })
+    },
+    copyClipboardAddress () {
+      var address = this.currentOrder.address
+      copyToClipboard(address.flat + ' ' + address.buildingName + ', ' + address.area + (address.landmark ? ', ' + address.landmark : '') + ', ' + address.cityName + ', ' + address.stateName + ' - ' + address.pincode).then(() => {
+        this.$q.notify({
+          message: 'Coppied address to clipboard!',
+          type: 'positive',
+          actions: [{ icon: 'close', color: 'white' }]
+        })
+      }).catch(err => {
+        console.error(err)
+        this.$q.notify({
+          message: 'Unable to copy text',
+          type: 'negative',
+          actions: [{ icon: 'close', color: 'white' }]
+        })
+      })
     }
+
   },
   computed: {
     isPending () {
