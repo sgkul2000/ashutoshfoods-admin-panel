@@ -3,7 +3,6 @@
     <h4>Ashutosh Foods</h4>
     <h6>Admin Panel</h6>
     <div class="inputWrapper q-px-lg">
-      <!-- <input type="text" v-model="email"> -->
       <q-input
         v-model="email"
         label="Enter email"
@@ -24,7 +23,7 @@
         :dense="true"
         :type="isPwd ? 'password' : 'text'"
         :disable="loading"
-        :rules="[val => !!val || 'Password Required']"
+        :rules="[(val) => !!val || 'Password Required']"
       >
         <template v-slot:prepend>
           <q-icon name="vpn_key" />
@@ -63,63 +62,65 @@
 
 <script>
 export default {
-  name: 'login',
-  data () {
+  name: "login",
+  data() {
     return {
-      email: '',
-      password: '',
+      email: "",
+      password: "",
       isPwd: true,
       loading: false,
       delay: 0,
-      isEmailValid: false
-    }
+      isEmailValid: false,
+    };
   },
   watch: {
-    email (val) {
-      this.isEmailValid = false
-    }
+    email(val) {
+      this.isEmailValid = false;
+    },
   },
   methods: {
-    login () {
-      this.loading = true
-      // this.$refs.ajaxBar.start()
-      this.$q.loadingBar.start()
-      this.$axios.post('/auth/login', {
-        email: this.email,
-        password: this.password
-      }).then((res) => {
-        var data = res.data
-        console.log(data)
-        if (data.auth) {
-          localStorage.setItem('user', JSON.stringify(data.user))
-          localStorage.setItem('jwt', data.token)
-          this.$store.commit('mainStore/updateAuth', data.user)
-          this.$router.push({ name: 'Home' })
-          this.$q.notify({
-            type: 'positive',
-            message: `Welcome ${data.user.username}`
-          })
-        } else {
-          throw data.error
-        }
-        // this.$refs.ajaxBar.stop()
-      }).catch((err) => {
-        console.error(err)
-        this.$q.notify({
-          message: 'Login unsuccessful, please try again.',
-          type: 'negative',
-          caption: err,
-          actions: [{ icon: 'close', color: 'white' }]
+    login() {
+      this.loading = true;
+      this.$q.loadingBar.start();
+      this.$axios
+        .post("/auth/login", {
+          email: this.email,
+          password: this.password,
         })
-      })
-      this.$q.loadingBar.stop()
-      this.loading = false
+        .then((res) => {
+          var data = res.data;
+          console.log(data);
+          if (data.auth) {
+            localStorage.setItem("user", JSON.stringify(data.user));
+            localStorage.setItem("jwt", data.token);
+            this.$store.commit("mainStore/updateAuth", data.user);
+            this.$router.push({ name: "Home" });
+            this.$q.notify({
+              type: "positive",
+              message: `Welcome ${data.user.username}`,
+            });
+          } else {
+            throw data.error;
+          }
+          // this.$refs.ajaxBar.stop()
+        })
+        .catch((err) => {
+          console.error(err);
+          this.$q.notify({
+            message: "Login unsuccessful, please try again.",
+            type: "negative",
+            caption: err,
+            actions: [{ icon: "close", color: "white" }],
+          });
+        });
+      this.$q.loadingBar.stop();
+      this.loading = false;
     },
-    validateForm () {
-      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      return !(re.test(String(this.email).toLowerCase()))
-    }
-  }
-}
+    validateForm() {
+      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return !re.test(String(this.email).toLowerCase());
+    },
+  },
+};
 </script>
 <style lang="scss" scoped src="src/css/app.scss"></style>
